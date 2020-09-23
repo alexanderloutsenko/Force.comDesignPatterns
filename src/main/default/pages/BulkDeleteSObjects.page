@@ -1,0 +1,34 @@
+<apex:page controller="BulkDeleteSObjects_Controller">
+<!-- this code is from Pluralsight course called Force.com Design Patterns 1 -->
+
+<apex:sectionHeader title="Bulk Delete" subtitle="SObjects"/>
+	<apex:form >
+		<apex:pageBlock >
+			<apex:pageBlockButtons location="both">
+				<apex:commandButton value="Delete Selected" action="{!deleteSelected}" onclick="if (!confirm('Are you sure?')) return false;"/>
+			</apex:pageBlockButtons>
+			
+			<apex:pageMessages />
+
+			<apex:pageBlockSection columns="1">
+				<apex:outputPanel >
+					<apex:outputLabel value="Enter SOQL Command: " for="command"/>
+                    &nbsp;
+                    <!-- this is a field where a user enters a query for selecting the data to be deleted -->
+					<apex:inputText value="{!selectString}" id="command" style="width:200px;"/>
+					&nbsp;
+					<apex:commandButton value="Go!" action="{!executeSelect}"/> 
+				</apex:outputPanel>
+				
+				<apex:pageBlockTable value="{!sObjectWrapperList}" var="item">
+					<apex:column headerValue="Delete" style="width:20px;">
+						<apex:inputCheckbox value="{!item.deleteThis}"/>
+					</apex:column>
+					<apex:column headerValue="Name">
+						<apex:outputText value="{!item.name}"/>
+					</apex:column>
+				</apex:pageBlockTable>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>

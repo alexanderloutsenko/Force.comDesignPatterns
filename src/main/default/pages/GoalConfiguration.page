@@ -1,0 +1,73 @@
+<apex:page controller="GoalConfiguration_Controller" title="Configuration">
+<apex:sectionHeader title="Goal Tracker" subtitle="Configuration"/>
+
+	<apex:form id="theForm">
+		
+		<apex:pageBlock id="theBlock" title="Schedule & Queue">
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton value="Activate Schedule" action="{!enableSchedule}" rendered="{!(isScheduleEnabled != true)}" rerender="theBlock"/>
+				<apex:commandButton value="Deactivate Schedule" action="{!disableSchedule}" rendered="{!(isScheduleEnabled == true)}" rerender="theBlock"/>
+				<apex:commandButton value="Process Queue Items Now" action="{!processQueue}" rendered="{!hasGoalQualifiers}" rerender="theBlock"/>
+			</apex:pageBlockButtons>
+				
+			<!-- SCHEDULE STATUS -->
+			<apex:pageBlockSection columns="1">
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Schedule Status"/>
+					<apex:outputText value="{!scheduleStatus}"/>
+				</apex:pageBlockSectionItem>
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Show Completed Items"/>
+					<apex:outputPanel id="showcompleted">
+						<apex:inputCheckbox value="{!showCompleted}">
+							<apex:actionSupport event="onclick" action="{!toggleShowCompleted}" rerender="theBlock"/>
+						</apex:inputCheckbox>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+
+			<!-- ERROR CONDITION -->
+			<apex:pageBlockSection title="Error(s) have been found..." rendered="{!(hasErrors == true)}" collapsible="false">
+				<apex:pageBlockSectionItem >
+					<apex:outputLabel value="Error Description" for="errors"/>
+					<apex:outputPanel >
+						<apex:outputText value="{!errorMessage}" id="errors" style="color: red;"/>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+	        </apex:pageBlockSection>
+
+			<!-- QUEUE ITEM LIST -->
+			<apex:pageBlockSection columns="1" title="Queue Items" collapsible="true" id="queueItems">
+				<apex:pageBlockTable value="{!goalQualifiers}" var="item" rendered="{!listHasItems}">
+					<apex:column headerValue="Goal Qualifier">
+						<apex:outputLink value="/{!item.Name}">{!item.Name}</apex:outputLink>
+					</apex:column>
+					<apex:column headerValue="Awarded To">
+						<apex:outputLink value="/{!item.GoalParticipant__r.User__c}">{!item.GoalParticipant__r.User__r.Name}</apex:outputLink>
+					</apex:column>
+					<apex:column headerValue="Account">
+						<apex:outputLink value="/{!item.Account__c}">{!item.Account__r.Name}</apex:outputLink>
+					</apex:column>
+					<apex:column headerValue="Contact">
+						<apex:outputLink value="/{!item.Contact__c}">{!item.Contact__r.Name}</apex:outputLink>
+					</apex:column>
+					<apex:column headerValue="Lead">
+						<apex:outputLink value="/{!item.Lead__c}">{!item.Lead__r.Name}</apex:outputLink>
+					</apex:column>
+					<apex:column headerValue="Opportunity">
+						<apex:outputLink value="/{!item.Opportunity__c}">{!item.Opportunity__r.Name}</apex:outputLink>
+					</apex:column>
+					<apex:column headerValue="Created Date">
+						<apex:outputText value="{!item.CreatedDate}"/>
+					</apex:column>
+					<apex:column headerValue="Status">
+						<apex:outputText value="{!item.Status__c}"/>
+					</apex:column>
+				</apex:pageBlockTable>
+				<apex:pageBlockSectionItem >
+					<apex:outputText value="- Empty -" rendered="{!(listHasItems != true)}"/>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
