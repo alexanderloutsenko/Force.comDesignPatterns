@@ -1,0 +1,77 @@
+<apex:page controller="FlowFactoryDemoController">
+<apex:sectionHeader title="Membership" subtitle="Levels"/>
+	<apex:form >
+		<apex:pageBlock >
+			<apex:pageBlockButtons location="top">
+				<apex:commandButton value="Membership Level Flow" action="{!syncContact}" rerender="topSection, externalLists"/>
+				<apex:commandButton value="Unsubscribe Flow" action="{!unsubscribeContact}" rerender="topSection, externalLists"/>
+				<apex:commandButton value="Delete All" action="{!deleteAll}" rerender="topSection, externalLists"/>
+			</apex:pageBlockButtons> 
+
+			<apex:pageBlockSection id="topSection" columns="1">
+			
+				<!-- CONTACT INPUT -->
+				<apex:pageBlockSectionItem id="selectContact">
+					<apex:outputLabel id="l1" value="Contact" for="theField"/>
+					<apex:outputPanel id="o1">
+						<apex:inputField id="theField" value="{!theContact.ReportsToId}"/>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+				
+				<!-- EXECUTED FLOW STEPS -->
+				<apex:pageBlockSectionItem id="stepList">
+					<apex:outputLabel id="l2" value="Executed Steps" for="theField"/>
+					<apex:outputPanel id="o2">
+						<apex:pageBlockTable id="stepTable" value="{!flowSteps}" var="item">
+							<apex:column headerValue="#">
+								<apex:outputText value="{!item.stepNumber}"/>
+							</apex:column>
+							<apex:column headerValue="Flow Step">
+								<apex:outputText value="{!item.step}"/>
+							</apex:column>
+						</apex:pageBlockTable>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+			
+			<apex:pageBlockSection id="externalLists" columns="1" >
+			
+				<!-- "EXTERNAL" ACCOUNTS LIST -->
+				<apex:pageBlockSectionItem id="accounts">
+					<apex:outputLabel id="l3" value="External Accounts" for="t1"/>
+					<apex:outputPanel id="o3">
+						<apex:pageBlockTable id="t1" value="{!externalAccounts}" var="item">
+							<apex:column headerValue="Name">
+								<apex:outputText value="{!item.Name}"/>
+							</apex:column>
+							<apex:column headerValue="Email">
+								<apex:outputText value="{!item.Email__c}"/>
+							</apex:column>
+							<apex:column headerValue="Membership Level">
+								<apex:outputText value="{!item.Membership_Level__c}"/>
+							</apex:column>
+						</apex:pageBlockTable>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+
+				<!-- MAILING LIST -->
+				<apex:pageBlockSectionItem id="mailingList">
+					<apex:outputLabel id="l4" value="Mailing List" for="t2"/>
+					<apex:outputPanel id="o5">
+						<apex:pageBlockTable id="t2" value="{!mailingList}" var="item">
+							<apex:column headerValue="Name">
+								<apex:outputText value="{!item.Name}"/>
+							</apex:column>
+							<apex:column headerValue="Email">
+								<apex:outputText value="{!item.Email__c}"/>
+							</apex:column>
+							<apex:column headerValue="Membership Level">
+								<apex:outputText value="{!item.Membership_Level__c}"/>
+							</apex:column>
+						</apex:pageBlockTable>
+					</apex:outputPanel>
+				</apex:pageBlockSectionItem>
+			</apex:pageBlockSection>
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
